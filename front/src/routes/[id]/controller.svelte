@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Compass from '$lib/components/compass.svelte';
 	import Controls from '$lib/components/controls.svelte';
 	import Coordinates from '$lib/components/coordinates.svelte';
 	import FuelGauge from '$lib/components/fuel-gauge.svelte';
@@ -15,6 +16,9 @@
 <div class="w-full h-full relative flex font-mono">
 	<div class="absolute left-4 top-4">
 		<Coordinates />
+	</div>
+	<div class="absolute w-full flex justify-center top-4">
+		<Compass />
 	</div>
 	<div class="absolute right-4 top-4">
 		<FuelGauge />
