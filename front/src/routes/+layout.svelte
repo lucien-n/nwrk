@@ -2,6 +2,6 @@
 	import '../app.postcss';
 </script>
 
-<main class="w-full h-full overflow-hidden bg-neutral-800 text-white">
+<main class="w-full h-full overflow-hidden">
 	<slot />
 </main>
