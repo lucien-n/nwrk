@@ -4,5 +4,6 @@
 	export let data: PageData;
 
 	const { id } = data;
-	console.log(id);
 </script>
+
+<h1>Controlling {id}</h1>

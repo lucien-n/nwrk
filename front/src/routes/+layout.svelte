@@ -1,5 +1,7 @@
 <script lang="ts">
-  import "../app.postcss"
+	import '../app.postcss';
 </script>
 
-<slot/>
+<main class="w-full h-full overflow-hidden bg-neutral-800 text-white">
+	<slot />
+</main>
