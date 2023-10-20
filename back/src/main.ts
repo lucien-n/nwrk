@@ -65,10 +65,14 @@ const authenticateTurtle = (ws: WebSocket, content: any) => {
   else turtle = new Turtle(ws, world, id);
 
   turtles.push(turtle);
+  log.success(`Turtle '${turtle.id}' connected`);
 };
 
-const authenticateClient = (ws: WebSocket, name: string) => {
+const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
+  const name = content.name || "Unnamed";
   const client = new Client(ws, name);
+
+  log.success(`Client '${name}' connected`);
   if (turtles.length === 0) return;
   client.controlling = turtles[0].id;
 };
