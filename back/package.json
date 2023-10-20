@@ -8,22 +8,17 @@
     "start": "tsc ./src/main.ts"
   },
   "devDependencies": {
-    "@types/method-override": "^0.0.34",
     "@types/node": "^20.8.3",
     "@types/ws": "^8.5.6",
     "chalk": "^5.3.0",
     "dotenv": "^16.3.1",
-    "drizzle-kit": "^0.19.13",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "@libsql/client": "^0.3.6",
-    "drizzle-orm": "^0.28.6",
     "moment": "^2.29.4",
-    "node-json-db": "^2.2.0",
     "ws": "^8.14.2"
   },
   "main": "src/main.ts",
