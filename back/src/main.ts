@@ -72,9 +72,22 @@ const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
   const name = content.name || "Unnamed";
   const client = new Client(ws, name);
 
+  client.send(
+    JSON.stringify({
+      type: "auth",
+      success: true,
+    })
+  );
+
   log.success(`Client '${name}' connected`);
   if (turtles.length === 0) return;
   client.controlling = turtles[0].id;
+
+  sync(
+    turtles.find(({ id }) => id === client.controlling) || null,
+    client,
+    world
+  );
 };
 
 const sync = async (

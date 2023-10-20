@@ -32,7 +32,10 @@
 
 	const onClose = (ev: CloseEvent) => {};
 
-	const onMessage = (ev: MessageEvent) => {};
+	const onMessage = (ev: MessageEvent) => {
+		const data = JSON.parse(ev.data) as SocketResponse;
+    const { reqId, type, cmd, success, result, content } = data;
+	};
 </script>
 
 {#if state === 'connected'}
