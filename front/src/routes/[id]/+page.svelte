@@ -9,6 +9,7 @@
 	const { id } = data;
 
 	let ws: WebSocket;
+	let state: 'connected' | 'disconnected' | 'waiting' | 'noturtle' = 'disconnected';
 
 	onMount(() => {
 		connect();
@@ -33,4 +34,11 @@
 	const onMessage = (ev: MessageEvent) => {};
 </script>
 
-<h1>Controlling {id}</h1>
+{#if state === 'connected'}
+	<h1>Controlling {id}</h1>
+{:else if state === 'disconnected'}
+	<div class="w-full h-full flex flex-col gap-3 items-center justify-center">
+		<h1 class="text-3xl">Disconnected</h1>
+		<button on:click={() => connect()}>Reconnect</button>
+	</div>
+{/if}
