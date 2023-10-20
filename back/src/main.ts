@@ -39,15 +39,24 @@ const handleTurtle = (
   if (cmd === "auth") authenticateTurtle(ws, content);
 };
 
-const handleClient = (
+const handleClient = async (
   ws: WebSocket,
   type: string,
   cmd: string,
   content: any,
   reqId: string
 ) => {
-  if (cmd === "auth") authenticateClient(ws, content);
-  else turtles.forEach((turtle) => turtle.interpret(cmd));
+  if (cmd === "auth") {
+    authenticateClient(ws, content);
+    return;
+  }
+  if (!client) return;
+
+  const controlling = turtles.find(({ id }) => id === client?.controlling);
+  if (!controlling) return;
+
+  await controlling.interpret(cmd);
+  sync(controlling, client, world);
 };
 
 const authenticateTurtle = async (ws: WebSocket, content: any) => {
@@ -75,9 +84,9 @@ const authenticateTurtle = async (ws: WebSocket, content: any) => {
 
 const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
   const name = content.name || "Unnamed";
-  const client = new Client(ws, name);
+  const newClient = new Client(ws, name);
 
-  client.send(
+  newClient.send(
     JSON.stringify({
       type: "auth",
       success: true,
@@ -86,13 +95,15 @@ const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
 
   log.success(`Client '${name}' connected`);
   if (turtles.length === 0) return;
-  client.controlling = turtles[0].id;
+  newClient.controlling = turtles[0].id;
 
   sync(
-    turtles.find(({ id }) => id === client.controlling) || null,
-    client,
+    turtles.find(({ id }) => id === newClient.controlling) || null,
+    newClient,
     world
   );
+
+  client = newClient;
 };
 
 const sync = async (

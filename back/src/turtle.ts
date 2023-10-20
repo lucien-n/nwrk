@@ -141,17 +141,17 @@ export class Turtle {
     }
   }
 
-  interpret(msg: string) {
+  async interpret(msg: string) {
     const [cmd, ...args] = msg.split(":");
 
     switch (cmd) {
       case "move":
         if (!["up", "down", "forward", "back"].includes(args[0])) return;
-        this.move(args[0] as any);
+        await this.move(args[0] as any);
         break;
       case "turn":
         if (!["left", "right"].includes(args[0])) return;
-        this.turn(args[0] as any);
+        await this.turn(args[0] as any);
         break;
     }
   }
