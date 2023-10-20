@@ -4,21 +4,26 @@
 	import { initWebsocket } from '$lib/websocket';
 	import { generateId } from '$lib/helper';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import type { SocketResponse } from '$lib/types';
+	import { Loader2 } from 'lucide-svelte';
+	import { turtleStore, worldStore } from '$lib/stores';
 
 	export let data: PageData;
 
 	const { id } = data;
+	const url = 'ws://localhost:8080';
 
 	let ws: WebSocket;
-	let state: 'connected' | 'disconnected' | 'waiting' | 'noturtle' = 'disconnected';
+	let state: 'connected' | 'disconnected' | 'connecting' | 'noturtle' | 'error' = 'disconnected';
 
 	onMount(() => {
 		connect();
 	});
 
 	const connect = () => {
+		state = 'connecting';
 		if (ws) ws.close();
-		ws = initWebsocket('ws://localhost:8080', onOpen, onClose, onMessage);
+		ws = initWebsocket(url, onOpen, onClose, onMessage);
 	};
 
 	const send = (cmd: string) => {
@@ -30,19 +35,36 @@
 		send('auth');
 	};
 
-	const onClose = (ev: CloseEvent) => {};
+	const onClose = (ev: CloseEvent) => {
+		state = 'disconnected';
+	};
 
 	const onMessage = (ev: MessageEvent) => {
 		const data = JSON.parse(ev.data) as SocketResponse;
-    const { reqId, type, cmd, success, result, content } = data;
+		const { reqId, type, cmd, success, result, content } = data;
+
+		if (type === 'auth') state = success ? 'connected' : 'error';
+		else if (type === 'sync') sync(content);
+	};
+
+	const sync = (content?: any) => {
+		if (!content) return;
+		const { turtle, world } = content;
+		turtleStore.set(turtle);
+		worldStore.add(world);
 	};
 </script>
 
-{#if state === 'connected'}
-	<h1>Controlling {id}</h1>
-{:else if state === 'disconnected'}
-	<div class="w-full h-full flex flex-col gap-3 items-center justify-center">
+<div class="w-full h-full flex flex-col gap-3 items-center justify-center text-xl">
+	{#if state === 'connected'}
+		<h1>Controlling {id}</h1>
+	{:else if state === 'connecting'}
+		<h1 class="text-3xl">Connecting</h1>
+		<span class="animate-spin"><Loader2 /></span>
+	{:else if state === 'disconnected'}
 		<h1 class="text-3xl">Disconnected</h1>
 		<Button on:click={() => connect()}>Reconnect</Button>
-	</div>
-{/if}
+	{:else if state === 'error'}
+		<h1 class="text-3xl">Error while connecting to <a href={url}>{url}</a></h1>
+	{/if}
+</div>
