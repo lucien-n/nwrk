@@ -27,6 +27,20 @@ wss.on("connection", (ws) => {
     if (id === "turtle") handleTurtle(ws, type, cmd, content, reqId);
     if (id === "client") handleClient(ws, type, cmd, content, reqId);
   });
+
+  ws.on("close", () => {
+    let index = -1;
+    const turtle = turtles.find((t, i) => {
+      index = i;
+      return t.ws === ws;
+    });
+
+    if (turtle && index >= 0) {
+      sync(null, client, world);
+      turtles.splice(index, 1);
+      log.info(`Turtle '${turtle.id}' disconnected`);
+    }
+  });
 });
 
 const handleTurtle = (

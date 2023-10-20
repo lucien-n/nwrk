@@ -11,7 +11,6 @@
 
 	export let data: PageData;
 
-	const { id } = data;
 	const url = 'ws://localhost:8080';
 
 	let ws: WebSocket;
@@ -53,6 +52,8 @@
 		const { turtle, world } = content;
 		turtleStore.set(turtle);
 		worldStore.add(world);
+
+		if (!turtle) state = 'noturtle';
 	};
 </script>
 
@@ -65,6 +66,8 @@
 	{:else if state === 'disconnected'}
 		<h1 class="text-3xl">Disconnected</h1>
 		<Button on:click={() => connect()}>Reconnect</Button>
+	{:else if state === 'noturtle'}
+		<h1 class="text-3xl">No turtle currently online</h1>
 	{:else if state === 'error'}
 		<h1 class="text-3xl">Error while connecting to <a href={url}>{url}</a></h1>
 	{/if}
