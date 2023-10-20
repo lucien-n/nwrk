@@ -1,21 +1,24 @@
 <script lang="ts">
 	import { turtleStore } from '$lib/stores';
+	import { onMount } from 'svelte';
 
 	let direction = 0;
 
-	turtleStore.subscribe((turtle) => {
-		if (!turtle) return;
-		direction = turtle.direction;
-	});
-
-	const getDirectionText = () => {
-		if (direction == 0) return 'N';
-		else if (direction == 1) return 'E';
-		else if (direction == 2) return 'S';
+	const getDirectionText = (dir: number) => {
+		if (dir == 0) return 'N';
+		else if (dir == 1) return 'E';
+		else if (dir == 2) return 'S';
 		return 'W';
 	};
+
+	onMount(() => {
+		turtleStore.subscribe((turtle) => {
+			if (!turtle) return;
+			direction = turtle.direction;
+		});
+	});
 </script>
 
 <h1 class="text-3xl font-bold">
-	{getDirectionText()}
+	{getDirectionText(direction)}
 </h1>
