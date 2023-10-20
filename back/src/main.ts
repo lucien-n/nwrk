@@ -50,7 +50,7 @@ const handleClient = (
   else turtles.forEach((turtle) => turtle.interpret(cmd));
 };
 
-const authenticateTurtle = (ws: WebSocket, content: any) => {
+const authenticateTurtle = async (ws: WebSocket, content: any) => {
   const { id } = content;
   if (id === null || id === undefined) {
     log.warn(`An unidentified turtle tried to connect`);
@@ -66,8 +66,8 @@ const authenticateTurtle = (ws: WebSocket, content: any) => {
 
   const { x, y, z, direction } = content;
   if (x && y && z && direction)
-    turtle = new Turtle(ws, world, id, x, y, z, direction);
-  else turtle = new Turtle(ws, world, id);
+    turtle = await new Turtle(ws, world, id, x, y, z, direction);
+  else turtle = await new Turtle(ws, world, id);
 
   turtles.push(turtle);
   log.success(`Turtle '${turtle.id}' connected`);
