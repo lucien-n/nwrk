@@ -13,6 +13,12 @@ export type Block = {
 
 export type Position = [x: number, y: number, z: number];
 
+export type CommandResponse<T> = {
+  reqId?: string;
+  success: boolean;
+  result?: T | null;
+};
+
 export enum Direction {
   NORTH = 0,
   EAST = 1,

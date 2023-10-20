@@ -1,8 +1,7 @@
-import { Direction, Position, Slot } from "./types";
+import { CommandResponse, Direction, Position, Slot } from "./types";
 import { logger as log } from "./logger";
 import { World } from "./world";
 import { MessageEvent, WebSocket } from "ws";
-import { Response } from "../../common/types";
 import { generateId } from "./helper";
 
 export class Turtle {
@@ -91,25 +90,57 @@ export class Turtle {
     }
   }
 
-  async move(move: "up" | "down" | "front" | "back") {}
+  async move(move: "up" | "down" | "front" | "back") {
+    if (move === "up") {
+      const success = await this.exec<boolean>("turtle.up()");
+      if (!success) return;
 
-  async exec<T>(cmd: string, reqId?: string): Promise<Response<T>> {
+      this.y++;
+    } else if (move === "down") {
+      const success = await this.exec<boolean>("turtle.down()");
+      if (!success) return;
+
+      this.y--;
+    } else if (move === "front") {
+      const success = await this.exec<boolean>("turtle.front()");
+      if (!success) return;
+
+      if (this.direction === Direction.NORTH) this.z--;
+      else if (this.direction === Direction.EAST) this.x++;
+      else if (this.direction === Direction.SOUTH) this.z++;
+      else if (this.direction === Direction.WEST) this.x--;
+    } else if (move === "back") {
+      const success = await this.exec<boolean>("turtle.back()");
+      if (!success) return;
+
+      if (this.direction === Direction.NORTH) this.z++;
+      else if (this.direction === Direction.EAST) this.x--;
+      else if (this.direction === Direction.SOUTH) this.z--;
+      else if (this.direction === Direction.WEST) this.x++;
+    }
+  }
+
+  async exec<T>(cmd: string, reqId?: string): Promise<CommandResponse<T>> {
     if (!reqId) reqId = generateId(); // * client didn't send the command but server did
 
     this.ws.send(JSON.stringify({ type: "eval", function: cmd, reqId }));
+    log.info(`Sent '${reqId}'`);
 
-    let promise = new Promise<Response<T>>((resolve) => {
+    return new Promise<CommandResponse<T>>((resolve) => {
+      // ? Set command timeout
+      setTimeout(() => resolve({ success: false }), 10_000);
+
+      // ? Wait for turtle's response
       this.ws.onmessage = ({ data: msg }: MessageEvent) => {
         if (!msg) return;
         const data = JSON.parse(msg.toString());
 
-        if (data.type === "response" && data.reqId === reqId) {
-          log.success(`Received '${reqId}' ${cmd.replace("turtle.", "")}`);
-          resolve({ success: data.success, result: data.result as T, reqId });
-        }
+        if (data.type !== "response" || data.reqId !== reqId) return;
+
+        resolve({ success: data.success, result: data.result as T, reqId });
+
+        log.success(`Received '${reqId}'`);
       };
     });
-
-    return promise;
   }
 }
