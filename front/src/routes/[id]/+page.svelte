@@ -7,6 +7,7 @@
 	import type { SocketResponse } from '$lib/types';
 	import { Loader2 } from 'lucide-svelte';
 	import { turtleStore, worldStore } from '$lib/stores';
+	import Controller from './controller.svelte';
 
 	export let data: PageData;
 
@@ -57,7 +58,7 @@
 
 <div class="w-full h-full flex flex-col gap-3 items-center justify-center text-xl">
 	{#if state === 'connected'}
-		<h1>Controlling {id}</h1>
+		<Controller />
 	{:else if state === 'connecting'}
 		<h1 class="text-3xl">Connecting</h1>
 		<span class="animate-spin"><Loader2 /></span>

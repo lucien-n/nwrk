@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Block, Turtle } from './types';
 
+export const controlsEnabled = writable<boolean>(true);
 export const turtleStore = writable<Turtle | null>(null);
 
 const createWorldStore = () => {
