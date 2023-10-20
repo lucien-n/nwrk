@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Block, Turtle } from './types';
+import { now } from './helper';
 
 export const controlsEnabled = writable<boolean>(true);
 export const turtleStore = writable<Turtle | null>(null);
@@ -41,3 +42,55 @@ const createWorldStore = () => {
 };
 
 export const worldStore = createWorldStore();
+
+type TCooldown = {
+	lastTriggerMs: number;
+	cooldownMs: number;
+};
+const createCoolDownStore = (cooldownMs: number = 200) => {
+	const { subscribe, set, update } = writable<TCooldown>({
+		lastTriggerMs: now(),
+		cooldownMs: cooldownMs
+	});
+
+	const trigger = () => {
+		update(({ cooldownMs }) => {
+			return {
+				lastTriggerMs: now(),
+				cooldownMs
+			};
+		});
+	};
+
+	const inactiveAt = (lastTriggerMs: number, cooldownMs: number) => {
+		return lastTriggerMs + cooldownMs;
+	};
+
+	const isActive = () => {
+		let active = false;
+		subscribe(({ lastTriggerMs, cooldownMs }) => {
+			active = now() - lastTriggerMs < cooldownMs;
+		});
+		return active;
+	};
+
+	const timeLeft = () => {
+		let timeLeftMs = 0;
+		subscribe(
+			({ lastTriggerMs, cooldownMs }) =>
+				(timeLeftMs = inactiveAt(lastTriggerMs, cooldownMs) - now())
+		);
+		return Math.abs(timeLeftMs);
+	};
+
+	return {
+		subscribe,
+		set,
+		update,
+		trigger,
+		isActive,
+		timeLeft
+	};
+};
+
+export const cooldownStore = createCoolDownStore(500);

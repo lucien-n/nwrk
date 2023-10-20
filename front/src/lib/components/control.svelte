@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { controlsEnabled } from '$lib/stores';
+	import { controlsEnabled, cooldownStore } from '$lib/stores';
 	import { cn } from '$lib/utils';
 	import { createEventDispatcher } from 'svelte';
 	import Button from './ui/button/button.svelte';
@@ -10,13 +10,14 @@
 	const dispatch = createEventDispatcher();
 
 	let pressed = false;
+	let isOnCooldown = false;
 
 	const handleKeydown = (event: KeyboardEvent) => {
 		if (!controlsEnabled) return;
 		if (event.key.toLowerCase() !== key.toLowerCase()) return;
 
 		pressed = true;
-		dispatch('click');
+		click();
 	};
 
 	const handleKeyup = (event: KeyboardEvent) => {
@@ -28,6 +29,18 @@
 
 	const handleClick = () => {
 		if (!controlsEnabled) return;
+		click();
+	};
+
+	const click = () => {
+		if (cooldownStore.isActive()) {
+			isOnCooldown = true;
+			setTimeout(() => (isOnCooldown = false), cooldownStore.timeLeft());
+		} else {
+			dispatch('click');
+			cooldownStore.trigger();
+		}
+
 		pressed = true;
 		setTimeout(() => (pressed = false), 300);
 	};
@@ -36,7 +49,12 @@
 <svelte:window on:keydown={handleKeydown} on:keyup={handleKeyup} />
 
 <Button
-	class={cn('relative h-16 m-0', width, pressed ? 'bg-red-500 hover:bg-red-400' : '')}
+	class={cn(
+		'relative h-16 m-0',
+		width,
+		pressed ? 'bg-red-500 hover:bg-red-400' : '',
+		isOnCooldown ? 'bg-blue-500' : ''
+	)}
 	on:click={handleClick}
 >
 	<div class="text-lg flex justify-center items-center font-bold font-mono">
