@@ -7,14 +7,14 @@
 </script>
 
 <div class="grid gap-2 grid-cols-3 w-fit">
-	<Control key="q" on:click={() => dispatch('move:down')}>
+	<Control key="q" on:click={() => dispatch('cmd', 'move:down')}>
 		<ArrowDownFromLine />
 	</Control>
-	<Control key="w" on:click={() => dispatch('move:forward')} />
-	<Control key="e" on:click={() => dispatch('move:up')}>
+	<Control key="w" on:click={() => dispatch('cmd', 'move:forward')} />
+	<Control key="e" on:click={() => dispatch('cmd', 'move:up')}>
 		<ArrowUpFromLine />
 	</Control>
-	<Control key="a" on:click={() => dispatch('turn:left')} />
-	<Control key="s" on:click={() => dispatch('move:back')} />
-	<Control key="d" on:click={() => dispatch('turn:right')} />
+	<Control key="a" on:click={() => dispatch('cmd', 'turn:left')} />
+	<Control key="s" on:click={() => dispatch('cmd', 'move:back')} />
+	<Control key="d" on:click={() => dispatch('cmd', 'turn:right')} />
 </div>

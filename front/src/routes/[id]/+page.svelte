@@ -58,7 +58,7 @@
 
 <div class="w-full h-full flex flex-col gap-3 items-center justify-center text-xl">
 	{#if state === 'connected'}
-		<Controller />
+		<Controller on:cmd={({ detail }) => send(detail)} />
 	{:else if state === 'connecting'}
 		<h1 class="text-3xl">Connecting</h1>
 		<span class="animate-spin"><Loader2 /></span>
