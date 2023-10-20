@@ -22,15 +22,16 @@ let client: Client | null = null;
 
 wss.on("connection", (ws) => {
   ws.on("message", async (msg: string) => {
-    const { id, cmd, content, reqId } = parseMessage(msg);
+    const { id, type, cmd, content, reqId } = parseMessage(msg);
 
-    if (id === "turtle") handleTurtle(ws, cmd, content, reqId);
-    if (id === "client") handleClient(ws, cmd, content, reqId);
+    if (id === "turtle") handleTurtle(ws, type, cmd, content, reqId);
+    if (id === "client") handleClient(ws, type, cmd, content, reqId);
   });
 });
 
 const handleTurtle = (
   ws: WebSocket,
+  type: string,
   cmd: string,
   content: any,
   reqId: string
@@ -40,6 +41,7 @@ const handleTurtle = (
 
 const handleClient = (
   ws: WebSocket,
+  type: string,
   cmd: string,
   content: any,
   reqId: string
@@ -50,7 +52,10 @@ const handleClient = (
 
 const authenticateTurtle = (ws: WebSocket, content: any) => {
   const { id } = content;
-  if (!id) return;
+  if (id === null || id === undefined) {
+    log.warn(`An unidentified turtle tried to connect`);
+    return;
+  }
 
   if (turtles.filter((t) => t.id === id).length > 0) {
     log.warn(`Turtle '${id}' is already authenticated`);

@@ -88,10 +88,6 @@ local function run()
         cmd = "auth",
         content = {
             id = os.getComputerID(),
-            x = 0,
-            y = 0,
-            z = 0,
-            direction = 0,
             fuelLevel = turtle.getFuelLevel()
         }
     }))
