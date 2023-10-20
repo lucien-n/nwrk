@@ -37,6 +37,10 @@ export class Turtle {
     return Promise.resolve(this.loadFromDB()).then(() => this);
   }
 
+  send(message: string) {
+    this.ws.send(message);
+  }
+
   async loadFromDB() {
     const turtle = await this.world.getTurtle(this.id);
     if (!turtle) {

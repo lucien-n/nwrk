@@ -9,4 +9,8 @@ export class Client {
     this.ws = ws;
     this.name = name;
   }
+
+  send(message: string) {
+    this.ws.send(message);
+  }
 }
