@@ -19,6 +19,8 @@
   "dependencies": {
     "moment": "^2.29.4",
     "node-json-db": "^2.2.0",
+    "sequelize": "^6.33.0",
+    "sqlite3": "^5.1.6",
     "ws": "^8.14.2"
   },
   "main": "src/main.ts",
