@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { controlsEnabled } from '$lib/stores';
+	import { cn } from '$lib/utils';
 	import { createEventDispatcher } from 'svelte';
 	import Button from './ui/button/button.svelte';
-	import { cn } from '$lib/utils';
 
 	export let key: string;
 	export let width: 'w-16' | 'w-full' = 'w-16';
@@ -39,8 +39,10 @@
 	class={cn('relative h-16 m-0', width, pressed ? 'bg-red-500 hover:bg-red-400' : '')}
 	on:click={handleClick}
 >
-	<slot />
-	<p class="absolute top-0 left-0 mt-1 text-sm font-bold font-mono ml-2">
-		{key === ' ' ? 'space' : key}
+	<div class="text-lg flex justify-center items-center font-bold font-mono">
+		{key.toLowerCase() === ' ' ? 'space' : key.toUpperCase()}
+	</div>
+	<p class="absolute scale-75 top-0 left-0 m-[.12rem]">
+		<slot />
 	</p>
 </Button>
