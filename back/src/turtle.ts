@@ -164,7 +164,10 @@ export class Turtle {
 
     return new Promise<CommandResponse<T>>((resolve) => {
       // ? Set command timeout
-      setTimeout(() => resolve({ success: false }), 10_000);
+      setTimeout(() => {
+        log.warn(`Request '${reqId}' timed out`);
+        resolve({ success: false });
+      }, 10_000);
 
       // ? Wait for turtle's response
       this.ws.onmessage = ({ data: msg }: MessageEvent) => {
