@@ -45,7 +45,7 @@ const handleClient = (
   content: any,
   reqId: string
 ) => {
-  if (cmd === "auth") authenticateClient(ws);
+  if (cmd === "auth") authenticateClient(ws, content);
 };
 
 const authenticateTurtle = (ws: WebSocket, content: any) => {
@@ -67,8 +67,8 @@ const authenticateTurtle = (ws: WebSocket, content: any) => {
   turtles.push(turtle);
 };
 
-const authenticateClient = (ws: WebSocket) => {
-  const client = new Client(ws);
+const authenticateClient = (ws: WebSocket, name: string) => {
+  const client = new Client(ws, name);
   if (turtles.length === 0) return;
   client.controlling = turtles[0].id;
 };
