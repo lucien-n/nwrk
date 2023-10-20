@@ -124,6 +124,38 @@ export class Turtle {
     }
   }
 
+  async turn(direction: "left" | "right") {
+    if (direction === "left") {
+      const success = await this.exec<boolean>("turtle.turnLeft()");
+      if (!success) return;
+
+      this.direction--;
+      this.direction += 4;
+      this.direction %= 4;
+    } else if (direction === "right") {
+      const success = await this.exec<boolean>("turtle.turnLeft()");
+      if (!success) return;
+
+      this.direction++;
+      this.direction %= 4;
+    }
+  }
+
+  interpret(msg: string) {
+    const [cmd, ...args] = msg.split(":");
+
+    switch (cmd) {
+      case "move":
+        if (!["up", "down", "forward", "back"].includes(args[0])) return;
+        this.move(args[0] as any);
+        break;
+      case "turn":
+        if (!["left", "right"].includes(args[0])) return;
+        this.turn(args[0] as any);
+        break;
+    }
+  }
+
   async exec<T>(cmd: string, reqId?: string): Promise<CommandResponse<T>> {
     if (!reqId) reqId = generateId(); // * client didn't send the command but server did
 

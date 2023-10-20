@@ -1,6 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws";
 import { logger as log } from "./logger";
-import { IncomingMessage } from "http";
 import { Turtle } from "./turtle";
 import { Client } from "./client";
 import { World } from "./world";
@@ -46,6 +45,7 @@ const handleClient = (
   reqId: string
 ) => {
   if (cmd === "auth") authenticateClient(ws, content);
+  else turtles.forEach((turtle) => turtle.interpret(cmd));
 };
 
 const authenticateTurtle = (ws: WebSocket, content: any) => {
