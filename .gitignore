@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+.svelte-kit
+
 .env
 world.json
 src.old
