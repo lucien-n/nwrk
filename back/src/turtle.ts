@@ -164,7 +164,7 @@ export class Turtle {
 
     return new Promise<CommandResponse<T>>((resolve) => {
       // ? Set command timeout
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         log.warn(`Request '${reqId}' timed out`);
         resolve({ success: false });
       }, 5_000);
@@ -177,6 +177,7 @@ export class Turtle {
         if (data.type !== "response" || data.reqId !== reqId) return;
 
         resolve({ success: data.success, result: data.result as T, reqId });
+        clearTimeout(timeout);
 
         log.success(`Received '${reqId}'`);
       };
