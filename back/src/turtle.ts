@@ -94,7 +94,7 @@ export class Turtle {
     }
   }
 
-  async move(move: "up" | "down" | "front" | "back") {
+  async move(move: "up" | "down" | "forward" | "back") {
     if (move === "up") {
       const success = await this.exec<boolean>("turtle.up()");
       if (!success) return;
@@ -105,8 +105,8 @@ export class Turtle {
       if (!success) return;
 
       this.y--;
-    } else if (move === "front") {
-      const success = await this.exec<boolean>("turtle.front()");
+    } else if (move === "forward") {
+      const success = await this.exec<boolean>("turtle.forward()");
       if (!success) return;
 
       if (this.direction === Direction.NORTH) this.z--;
@@ -133,7 +133,7 @@ export class Turtle {
       this.direction += 4;
       this.direction %= 4;
     } else if (direction === "right") {
-      const success = await this.exec<boolean>("turtle.turnLeft()");
+      const success = await this.exec<boolean>("turtle.turnRight()");
       if (!success) return;
 
       this.direction++;
