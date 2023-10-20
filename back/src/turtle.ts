@@ -167,7 +167,7 @@ export class Turtle {
       setTimeout(() => {
         log.warn(`Request '${reqId}' timed out`);
         resolve({ success: false });
-      }, 10_000);
+      }, 5_000);
 
       // ? Wait for turtle's response
       this.ws.onmessage = ({ data: msg }: MessageEvent) => {
