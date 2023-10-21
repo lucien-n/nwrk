@@ -14,14 +14,13 @@
 	const url = 'ws://localhost:8080';
 
 	let ws: WebSocket;
-	let state: 'connected' | 'disconnected' | 'connecting' | 'noturtle' | 'error' = 'disconnected';
+	let state: 'connected' | 'disconnected' | 'connecting' | 'noturtle' | 'error' = 'connecting';
 
 	onMount(() => {
 		connect();
 	});
 
 	const connect = () => {
-		state = 'connecting';
 		if (ws) ws.close();
 		ws = initWebsocket(url, onOpen, onClose, onMessage);
 	};
