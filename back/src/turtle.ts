@@ -96,17 +96,17 @@ export class Turtle {
 
   async move(move: "up" | "down" | "forward" | "back") {
     if (move === "up") {
-      const success = await this.exec<boolean>("turtle.up()");
+      const { success } = await this.exec<unknown>("turtle.up()");
       if (!success) return;
 
       this.y++;
     } else if (move === "down") {
-      const success = await this.exec<boolean>("turtle.down()");
+      const { success } = await this.exec<unknown>("turtle.down()");
       if (!success) return;
 
       this.y--;
     } else if (move === "forward") {
-      const success = await this.exec<boolean>("turtle.forward()");
+      const { success } = await this.exec<unknown>("turtle.forward()");
       if (!success) return;
 
       if (this.direction === Direction.NORTH) this.z--;
@@ -114,7 +114,7 @@ export class Turtle {
       else if (this.direction === Direction.SOUTH) this.z++;
       else if (this.direction === Direction.WEST) this.x--;
     } else if (move === "back") {
-      const success = await this.exec<boolean>("turtle.back()");
+      const { success } = await this.exec<unknown>("turtle.back()");
       if (!success) return;
 
       if (this.direction === Direction.NORTH) this.z++;
@@ -126,14 +126,14 @@ export class Turtle {
 
   async turn(direction: "left" | "right") {
     if (direction === "left") {
-      const success = await this.exec<boolean>("turtle.turnLeft()");
+      const { success } = await this.exec<unknown>("turtle.turnLeft()");
       if (!success) return;
 
       this.direction--;
       this.direction += 4;
       this.direction %= 4;
     } else if (direction === "right") {
-      const success = await this.exec<boolean>("turtle.turnRight()");
+      const { success } = await this.exec<unknown>("turtle.turnRight()");
       if (!success) return;
 
       this.direction++;
