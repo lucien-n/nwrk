@@ -4,23 +4,24 @@ import { Turtle } from "./turtle";
 import { Client } from "./client";
 import { World } from "./world";
 import { Block } from "./types";
+import express from "express";
+import expressWs from "express-ws";
 
 const port: number = 8080;
 
-const wss = new WebSocketServer(
-  {
-    port,
-  },
-  () => {
-    log.info(`Listenning on port ${port}`);
-  }
-);
+const app = express();
+const wss = expressWs(app).app;
 
 const world = new World();
 const turtles: Turtle[] = [];
 let client: Client | null = null;
 
-wss.on("connection", (ws) => {
+app.get("/ids", (req, res) => {
+  const ids = turtles.map(({ id }) => id);
+  res.json(ids);
+});
+
+wss.ws("/", (ws: WebSocket) => {
   ws.on("message", async (msg: string) => {
     const { id, type, cmd, content, reqId } = parseMessage(msg);
 
@@ -149,3 +150,7 @@ const parseMessage = (msg: string) => {
   const data = JSON.parse(msg.toString());
   return data;
 };
+
+app.listen(port, () => {
+  log.info(`Listenning on port ${port}`);
+});
