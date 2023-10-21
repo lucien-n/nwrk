@@ -172,6 +172,8 @@ export class Turtle {
         await this.refuel();
         break;
     }
+
+    this.world.setTurtle(this);
   }
 
   async exec<T>(cmd: string, reqId?: string): Promise<CommandResponse<T>> {

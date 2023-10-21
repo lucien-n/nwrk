@@ -1,6 +1,7 @@
 import { logger as log } from "./logger";
 import { Config, JsonDB } from "node-json-db";
 import { Block } from "./types";
+import { Turtle } from "./turtle";
 
 export class World {
   db: JsonDB;
@@ -21,6 +22,11 @@ export class World {
 
   async getTurtle(id: number) {
     return await this.get(`/turtle/${id}`);
+  }
+
+  async setTurtle({ id, x, y, z, direction }: Turtle) {
+    const path = `/turtle/${id}`;
+    this.db.push(path, { x, y, z, direction });
   }
 
   async getWorld() {
