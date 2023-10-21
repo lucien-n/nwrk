@@ -28,6 +28,6 @@
 		<Controls on:cmd={handleCommand} />
 	</div>
 	<div class="absolute right-4 bottom-4">
-		<Inventory />
+		<Inventory on:cmd={handleCommand} />
 	</div>
 </div>
