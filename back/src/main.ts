@@ -92,6 +92,8 @@ const authenticateTurtle = async (ws: WebSocket, content: any) => {
     turtle = await new Turtle(ws, world, id, x, y, z, direction);
   else turtle = await new Turtle(ws, world, id);
 
+  sync(turtle, client, world);
+
   turtles.push(turtle);
   log.success(`Turtle '${turtle.id}' connected`);
 };
@@ -108,14 +110,12 @@ const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
   );
 
   log.success(`Client '${name}' connected`);
+
+  const controlling = turtles.find(({ id }) => id === newClient.controlling);
+  sync(controlling || null, newClient, world);
+
   if (turtles.length === 0) return;
   newClient.controlling = turtles[0].id;
-
-  sync(
-    turtles.find(({ id }) => id === newClient.controlling) || null,
-    newClient,
-    world
-  );
 
   client = newClient;
 };

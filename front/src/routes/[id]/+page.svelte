@@ -50,10 +50,12 @@
 	const sync = (content?: any) => {
 		if (!content) return;
 		const { turtle, world } = content;
+
 		turtleStore.set(turtle);
 		worldStore.add(world);
 
 		if (!turtle) state = 'noturtle';
+		else state = 'connected';
 	};
 </script>
 
