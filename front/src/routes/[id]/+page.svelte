@@ -9,6 +9,10 @@
 	import { turtleStore, worldStore } from '$lib/stores';
 	import Controller from './controller.svelte';
 
+	export let data: PageData;
+
+	const { id } = data;
+
 	const url = 'ws://localhost:8080';
 
 	let ws: WebSocket;
@@ -25,7 +29,9 @@
 
 	const send = (cmd: string) => {
 		const reqId = generateId();
-		ws.send(JSON.stringify({ id: 'client', cmd, reqId, content: { name: 'Controller' } }));
+		ws.send(
+			JSON.stringify({ id: 'client', cmd, reqId, content: { name: 'Controller', controlling: id } })
+		);
 	};
 
 	const onOpen = (ev: Event) => {
