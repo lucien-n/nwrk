@@ -4,6 +4,15 @@ local port = 8080
 local host = "localhost"
 local url = "ws://" .. host .. ":" .. port
 
+function turtle.getFuelPercentage()
+    local max = turtle.getFuelLimit()
+    local level = turtle.getFuelLevel()
+
+    local percentage = ((max - level) / max) * 100
+
+    return true, percentage
+end
+
 function turtle.getInventory()
     local inventory = {}
     for i = 1, 16 do

@@ -12,7 +12,7 @@ export class Turtle {
   y: number;
   z: number;
   direction: Direction;
-  fuelLevel: number = 0;
+  fuelLevel: number = 0; // * percentage
   inventory: (Slot | null)[] = [];
 
   constructor(
@@ -64,8 +64,18 @@ export class Turtle {
       y: this.y,
       z: this.z,
       direction: this.direction,
-      fuelLevel: this.fuelLevel,
+      fuelLevel: await this.getFuelPercentage(),
     };
+  }
+
+  async getFuelPercentage() {
+    const { success, result } = await this.exec<number>(
+      "turtle.getFuelPercentage()"
+    );
+    if (!success || !result) return 0;
+
+    this.fuelLevel = result;
+    return this.fuelLevel;
   }
 
   getPosition(direction: "up" | "front" | "down"): Position {
