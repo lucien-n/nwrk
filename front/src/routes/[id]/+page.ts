@@ -5,5 +5,5 @@ export const load: PageLoad = async ({ params }) => {
 	const { id } = params;
 	if (!id) throw redirect(303, '/');
 
-	return { id };
+	return { id: parseInt(id) };
 };

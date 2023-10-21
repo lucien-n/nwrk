@@ -99,9 +99,11 @@ const authenticateTurtle = async (ws: WebSocket, content: any) => {
   log.success(`Turtle '${turtle.id}' connected`);
 };
 
-const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
-  const name = content.name || "Unnamed";
-  const newClient = new Client(ws, name);
+const authenticateClient = (
+  ws: WebSocket,
+  { name, controlling }: { name?: string; controlling?: number }
+) => {
+  const newClient = new Client(ws, name || "Unnamed");
 
   newClient.send(
     JSON.stringify({
@@ -110,15 +112,14 @@ const authenticateClient = (ws: WebSocket, content: { name?: string }) => {
     })
   );
 
+  client = newClient;
   log.success(`Client '${name}' connected`);
 
-  const controlling = turtles.find(({ id }) => id === newClient.controlling);
-  sync(controlling || null, newClient, world);
+  if (!controlling) sync(null, client, world);
 
-  if (turtles.length === 0) return;
-  newClient.controlling = turtles[0].id;
-
-  client = newClient;
+  const desiredTurtle = turtles.find(({ id }) => id === controlling);
+  if (desiredTurtle) client.controlling = desiredTurtle.id;
+  sync(desiredTurtle || null, client, world);
 };
 
 const sync = async (

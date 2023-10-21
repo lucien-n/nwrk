@@ -45,7 +45,7 @@ export class Turtle {
     const turtle = await this.world.getTurtle(this.id);
     if (!turtle) {
       log.warn(`Turtle not found '${this.id}' in db`);
-      return;
+      return this;
     }
 
     const { x, y, z, direction } = turtle;
