@@ -177,6 +177,13 @@ export class Turtle {
       case "refuel":
         await this.refuel();
         break;
+      case "inventory":
+        const [action, arg] = args;
+        switch (action) {
+          case "select":
+            const slot = parseInt(arg || "1");
+            await this.exec(`turtle.select(${slot})`);
+        }
     }
 
     this.world.setTurtle(this);
