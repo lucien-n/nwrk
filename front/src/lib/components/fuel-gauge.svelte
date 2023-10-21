@@ -18,7 +18,7 @@
 	$: if (gauge) gauge.style.width = `${percentage}%`;
 
 	const refuel = () => {
-		dispatch('refuel');
+		dispatch('cmd', 'refuel');
 	};
 </script>
 
