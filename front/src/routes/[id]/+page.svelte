@@ -9,8 +9,6 @@
 	import { turtleStore, worldStore } from '$lib/stores';
 	import Controller from './controller.svelte';
 
-	export let data: PageData;
-
 	const url = 'ws://localhost:8080';
 
 	let ws: WebSocket;
