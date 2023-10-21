@@ -21,7 +21,7 @@
 		<Compass />
 	</div>
 	<div class="absolute right-4 top-4">
-		<FuelGauge />
+		<FuelGauge on:refuel={() => handleCommand('refuel')} />
 	</div>
 
 	<div class="absolute left-4 bottom-4">

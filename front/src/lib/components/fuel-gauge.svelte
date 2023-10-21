@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { turtleStore } from '$lib/stores';
-	import { cn } from '$lib/utils';
-	import { Fuel } from 'lucide-svelte';
+	import { Fuel, RotateCw } from 'lucide-svelte';
+	import { createEventDispatcher } from 'svelte';
+	import Button from './ui/button/button.svelte';
+
+	const dispatch = createEventDispatcher();
 
 	let gauge: HTMLElement;
 	let percentage = 33;
@@ -13,6 +16,10 @@
 	});
 
 	$: if (gauge) gauge.style.width = `${percentage}%`;
+
+	const refuel = () => {
+		dispatch('refuel');
+	};
 </script>
 
 <section class="flex gap-2 items-center">
@@ -27,4 +34,9 @@
 			</p>
 		</div>
 	</div>
+	<button on:click={refuel}>
+		<div class:animate-bounce={percentage < 15}>
+			<RotateCw />
+		</div>
+	</button>
 </section>
