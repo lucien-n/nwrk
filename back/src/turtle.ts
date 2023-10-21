@@ -151,6 +151,12 @@ export class Turtle {
     }
   }
 
+  async refuel() {
+    const { success, result } = await this.exec<unknown>("turtle.refuel()");
+    log.info(success, result);
+    if (!success) return;
+  }
+
   async interpret(msg: string) {
     const [cmd, ...args] = msg.split(":");
 
@@ -162,6 +168,9 @@ export class Turtle {
       case "turn":
         if (!["left", "right"].includes(args[0])) return;
         await this.turn(args[0] as any);
+        break;
+      case "refuel":
+        await this.refuel();
         break;
     }
   }
