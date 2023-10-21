@@ -152,9 +152,8 @@ export class Turtle {
   }
 
   async refuel() {
-    const { success, result } = await this.exec<unknown>("turtle.refuel()");
-    log.info(success, result);
-    if (!success) return;
+    const { success } = await this.exec<unknown>("turtle.refuel()");
+    return success;
   }
 
   async interpret(msg: string) {
