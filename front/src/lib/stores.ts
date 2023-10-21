@@ -47,7 +47,7 @@ type TCooldown = {
 	lastTriggerMs: number;
 	cooldownMs: number;
 };
-const createCoolDownStore = (cooldownMs: number = 200) => {
+export const createCoolDownStore = (cooldownMs: number = 200) => {
 	const { subscribe, set, update } = writable<TCooldown>({
 		lastTriggerMs: now(),
 		cooldownMs: cooldownMs

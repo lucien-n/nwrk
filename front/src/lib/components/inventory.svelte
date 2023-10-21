@@ -1,14 +1,30 @@
 <script lang="ts">
-	import { controlsEnabled } from '$lib/stores';
+	import { controlsEnabled, cooldownStore, createCoolDownStore } from '$lib/stores';
+	import { createEventDispatcher } from 'svelte';
 	import Slot from './slot.svelte';
 
 	export let selected: number = 0;
+
+	const dispatch = createEventDispatcher();
+	const cooldown = createCoolDownStore(500);
 	const numberOfSlots = 16;
+
+	let timeout: number = 0;
 
 	const handleWheel = (ev: WheelEvent) => {
 		if (!controlsEnabled) return;
 		if (ev.deltaY < 0) selected = selected === 0 ? numberOfSlots - 1 : selected - 1;
 		if (ev.deltaY > 0) selected = selected === numberOfSlots - 1 ? 0 : selected + 1;
+
+		if (cooldown.isActive()) {
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(() => sync(), cooldown.timeLeft());
+		} else cooldown.trigger();
+	};
+
+	const sync = () => {
+		console.log(`Sending slot ${selected}`);
+		dispatch('cmd', `inventory:select:${selected}`);
 	};
 </script>
 
