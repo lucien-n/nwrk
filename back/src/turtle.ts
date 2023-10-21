@@ -3,6 +3,7 @@ import { logger as log } from "./logger";
 import { World } from "./world";
 import { MessageEvent, WebSocket } from "ws";
 import { generateId } from "./helper";
+import { Client } from "./client";
 
 export class Turtle {
   ws: WebSocket;
@@ -14,6 +15,7 @@ export class Turtle {
   direction: Direction;
   fuelLevel: number = 0; // * percentage
   inventory: (Slot | null)[] = [];
+  controller: Client | null = null;
 
   constructor(
     ws: WebSocket,
@@ -39,6 +41,10 @@ export class Turtle {
 
   send(message: string) {
     this.ws.send(message);
+  }
+
+  setController(client: Client | null) {
+    this.controller = client;
   }
 
   async loadFromDB() {

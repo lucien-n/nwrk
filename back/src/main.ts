@@ -118,7 +118,10 @@ const authenticateClient = (
   if (!controlling) sync(null, client, world);
 
   const desiredTurtle = turtles.find(({ id }) => id === controlling);
-  if (desiredTurtle) client.controlling = desiredTurtle.id;
+  if (desiredTurtle) {
+    client.controlling = desiredTurtle.id;
+    desiredTurtle.setController(client);
+  }
   sync(desiredTurtle || null, client, world);
 };
 
