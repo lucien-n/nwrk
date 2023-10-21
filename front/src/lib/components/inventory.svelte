@@ -23,8 +23,7 @@
 	};
 
 	const sync = () => {
-		console.log(`Sending slot ${selected}`);
-		dispatch('cmd', `inventory:select:${selected}`);
+		dispatch('cmd', `inventory:select:${selected + 1}`);
 	};
 </script>
 
