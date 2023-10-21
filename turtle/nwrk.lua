@@ -8,7 +8,7 @@ function turtle.getFuelPercentage()
     local max = turtle.getFuelLimit()
     local level = turtle.getFuelLevel()
 
-    local percentage = ((max - level) / max) * 100
+    local percentage = (level / max) * 100
 
     return true, percentage
 end
