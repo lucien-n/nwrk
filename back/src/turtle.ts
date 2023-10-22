@@ -63,6 +63,15 @@ export class Turtle {
     log.success(`Turtle loaded '${this.id}' from db`);
   }
 
+  async refreshData() {
+    const { success, result } = await this.exec<any>("turtle.getData()");
+    if (!success) return false;
+
+    const { inventory, fuel } = result;
+    if (inventory && inventory.length === 15) this.inventory = inventory;
+    if (fuel && fuel >= 0 && fuel <= 100) this.fuelLevel = fuel;
+  }
+
   async toJSON() {
     return {
       id: this.id,
@@ -70,7 +79,7 @@ export class Turtle {
       y: this.y,
       z: this.z,
       direction: this.direction,
-      fuelLevel: await this.getFuelPercentage(),
+      fuelLevel: this.fuelLevel,
     };
   }
 

@@ -137,6 +137,8 @@ const sync = async (
   if (wholeWorld) world = await w.getWorld();
   else if (t) world = await w.getWorldAround(t.x, t.y, t.z);
 
+  if (t) await t.refreshData();
+
   c.send(
     JSON.stringify({
       type: "sync",

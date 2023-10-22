@@ -4,12 +4,6 @@ local port = 8080
 local host = "localhost"
 local url = "ws://" .. host .. ":" .. port
 
-function turtle.getData()
-    local inventory = turtle.getInventory()
-    local fuel = turtle.getFuelPercentage()
-
-    return { inventory = inventory, fuel = fuel }
-end
 
 function turtle.getFuelPercentage()
     local max = turtle.getFuelLimit()
@@ -31,6 +25,13 @@ function turtle.getInventory()
         end
     end
     return true, inventory
+end
+
+function turtle.getData()
+    local _, inventory = turtle.getInventory()
+    local _, fuel = turtle.getFuelPercentage()
+
+    return true, { inventory = inventory, fuel = fuel }
 end
 
 function turtle.getWorld()
