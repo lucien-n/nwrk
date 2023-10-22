@@ -68,7 +68,8 @@ export class Turtle {
     if (!success) return false;
 
     const { inventory, fuel } = result;
-    if (inventory && inventory.length === 15) this.inventory = inventory;
+    if (inventory && inventory.length === 16)
+      this.inventory = inventory.map((slot: any) => (slot?.name ? slot : null));
     if (fuel && fuel >= 0 && fuel <= 100) this.fuelLevel = fuel;
   }
 
@@ -80,6 +81,7 @@ export class Turtle {
       z: this.z,
       direction: this.direction,
       fuelLevel: this.fuelLevel,
+      inventory: this.inventory,
     };
   }
 

@@ -16,13 +16,20 @@
 
 <Button
 	class={cn(
-		'relative w-16 h-16 m-0',
+		'relative w-20 h-20 m-0 p-1',
 		selected ? 'outline outline-offset-2 bg-red-500 hover:bg-red-400' : ''
 	)}
 	on:click={handleClick}
 >
 	{#if slot}
-		<p class="absolute top-0 left-0 mt-1 text-sm font-bold font-mono ml-2">
+		<div class="text-sm w-full h-full flex flex-col justify-center items-center text-center">
+			{#each slot.name.split(/:|_/).slice(1) as word}
+				<p>
+					{word}
+				</p>
+			{/each}
+		</div>
+		<p class="absolute top-0 left-0 m-1 text-sm font-bold font-mono">
 			{slot.count}
 		</p>
 	{/if}

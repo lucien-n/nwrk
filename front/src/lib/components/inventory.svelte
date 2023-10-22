@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { controlsEnabled, cooldownStore, createCoolDownStore } from '$lib/stores';
+	import { controlsEnabled, createCoolDownStore, turtleStore } from '$lib/stores';
 	import { createEventDispatcher } from 'svelte';
 	import Slot from './slot.svelte';
+	import { Card } from './ui/card';
+	import CardContent from './ui/card/card-content.svelte';
 
 	const dispatch = createEventDispatcher();
 	const cooldown = createCoolDownStore(500);
@@ -35,7 +37,7 @@
 <div class="grid grid-cols-4 grid-rows-4 gap-2">
 	{#each { length: numberOfSlots } as _, i}
 		<Slot
-			slot={null}
+			slot={$turtleStore?.inventory[i] || null}
 			selected={i === selected}
 			on:select={() => {
 				selected = i;
